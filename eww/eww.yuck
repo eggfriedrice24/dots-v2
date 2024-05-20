@@ -1,0 +1,164 @@
+;; ** EWW config
+;; ** Author: ikako
+
+;; < Variables ----------------------------------------------------------------------- />
+
+;; Workspace vars
+(defpoll WMS :interval "1s" `wmctrl -d | grep '*' | cut -d ' ' -f13`)
+
+;; Time vars
+(defpoll TIME :interval "5s" `date +\"%I:%M %p\"`)
+(defpoll DATE :interval "5s" `date +\"%A, %B %d\"`)
+
+;; System vars
+(defpoll HOST :interval "5s" `hostname`)
+(defpoll CPU_USAGE :interval "1s" `scripts/sys_info --cpu`)
+(defpoll MEM_USAGE :interval "1s" `scripts/sys_info --mem`)
+(defpoll DISK_USAGE :interval "1s" `scripts/sys_info --disk`)
+
+;; Battery vars
+(defpoll BATICON :interval "1m" `scripts/battery --icon`)
+(defpoll BATPERC :interval "1m" `scripts/battery --perc`)
+
+;; Volume vars
+(defpoll VOLICON :interval "1s" `scripts/volume --icon`)
+(defpoll VOLUME :interval "1s" `scripts/volume --get`)
+
+;; Network
+(defpoll WIFIICON :interval "10s" `scripts/check-network --icon`)
+(defpoll NETSTAT :interval "10s" `scripts/check-network --stat`)
+
+;; User
+(defvar IMAGE "images/me.jpeg")
+(defpoll USER :interval "10m" `whoami`)
+
+;; < Widgets ----------------------------------------------------------------------- />
+
+;; search
+(defwidget search [] 
+		(box :class "wrapper"
+			(box :orientation "h" :spacing 20 :valign "center" :halign "center" :space-evenly "false" :vexpand "false" :hexpand "false"
+				(button :style "background-image: url('images/icons/dashboard.svg');" :class "dashboardicon" :onclick "scripts/widget_search --menu")
+				)))
+
+;; apps
+(defwidget apps [] 
+		(box :class "wrapper"
+			(box :class "appicon-wrapper" :orientation "h" :spacing 30 :valign "center" :halign "center" :space-between "false" :vexpand "false" :hexpand "false"
+				(button :style "background-image: url('images/icons/apps/terminal.svg');" :class "appicon" :onclick "scripts/widget_apps --tr")
+				(button :style "background-image: url('images/icons/apps/firefox.svg');" :class "appicon" :onclick "scripts/widget_apps --ff")
+				(button :style "background-image: url('images/icons/apps/files.svg');" :class "appicon" :onclick "scripts/widget_apps --fm")
+				(button :style "background-image: url('images/icons/apps/notes.svg');" :class "appicon" :onclick "scripts/widget_apps --obs")
+				(button :style "background-image: url('images/icons/apps/discord.svg');" :class "appicon" :onclick "scripts/widget_apps --dc")
+				(button :style "background-image: url('images/icons/apps/slack.svg');" :class "appicon" :onclick "scripts/widget_apps --sl"))))
+
+;; clock
+(defwidget clock [] 
+		(box :class "wrapper"
+			(box :class "clockbox" :orientation "h" :spacing 10 :valign "center" :halign "center" :space-evenly "false" :vexpand "false" :hexpand "false"
+				(label :class "time" :halign "start" :wrap "false" :limit-width 100 :text TIME)
+				(label :class "date" :halign "start" :wrap "false" :limit-width 100 :text DATE))))
+
+;; resources
+(defwidget resources [] 
+		(box :class "wrapper" :orientation "h"
+				(box :class "resource-wrapper" :orientation "h" :valign "center" :halign "center" :spacing 10
+				  (button :style "background-image: url('images/icons/resources/cpu.svg');" :class "resourceicon")
+	  		  (label :class "value" :valign "end" :halign "center" :text "${CPU_USAGE}%"))
+				(box :class "resource-wrapper" :orientation "h" :valign "center" :halign "center" :spacing 10
+				  (button :style "background-image: url('images/icons/resources/memory.svg');" :class "resourceicon")
+	  		  (label :class "value" :valign "end" :halign "center" :text "${MEM_USAGE}%"))
+				(box :class "resource-wrapper" :orientation "h" :valign "center" :halign "center" :spacing 10
+				  (box :style "background-image: url('images/icons/resources/disk.svg');" :class "resourceicon")
+	  		  (label :class "value" :valign "end" :halign "center" :text "${DISK_USAGE}%"))))
+
+;; system
+(defwidget system [] 
+		(box :class "wrapper"
+			(box :orientation "h" :spacing 5 :valign "center" :halign "center" :space-between "false" :vexpand "false" :hexpand "false"
+				(button :onclick "scripts/widget_apps --pow"
+					(box :orientation "h" :spacing 8 :valign "center" :halign "center" :space-evenly "false" :vexpand "false" :hexpand "false"
+						(box :style "background-image: url('${BATICON}');" :class "trayicon")
+							(label :class "infotext" :halign "start" :text BATPERC)))
+				(button :onclick "scripts/volume --toggle"
+					(box :orientation "h" :spacing 8 :valign "center" :halign "center" :space-evenly "false" :vexpand "false" :hexpand "false"
+						(box :style "background-image: url('${VOLICON}');" :class "trayicon")
+							(label :class "infotext" :halign "start" :text VOLUME)))
+				(button :onclick "scripts/widget_apps --nm"
+					(box :orientation "h" :spacing 8 :valign "center" :halign "center" :space-evenly "false" :vexpand "false" :hexpand "false"
+						(box :style "background-image: url('${WIFIICON}');" :class "trayicon")
+							(label :class "infotext" :halign "start" :text NETSTAT)))
+				(button
+					(box :orientation "h" :spacing 8 :valign "center" :halign "center" :space-evenly "false" :vexpand "false" :hexpand "false"
+						(box :style "background-image: url('${IMAGE}');" :class "avatar")
+							(label :class "infotext" :halign "start" :text USER))))))
+
+;; < Windows ----------------------------------------------------------------------- />
+
+;; search
+(defwindow search
+           :monitor 0
+           :geometry (geometry :x "0px"
+                               :y "0px"
+                               :width "60px"
+                               :height "40px"
+                               :anchor "top left")
+           :stacking "fg"
+           :windowtype "dock"
+           :wm-ignore false
+(search))
+
+;; clock
+(defwindow clock
+           :monitor 0
+           :geometry (geometry :x "70px"
+                               :y "0px"
+                               :width "250px"
+                               :height "40px"
+                               :anchor "top left")
+           :stacking "fg"
+           :reserve (struts :distance "80px" :side "top")
+           :windowtype "dock"
+           :wm-ignore false
+(clock))
+
+;; apps
+(defwindow apps
+           :monitor 0
+           :geometry (geometry :x "330px"
+                               :y "0px"
+                               :width "380px"
+                               :height "40px"
+                               :anchor "top left")
+           :stacking "fg"
+           :windowtype "dock"
+           :wm-ignore false
+(apps))
+
+;; resources 
+(defwindow resources
+           :monitor 0
+           :geometry (geometry :x "400px"
+                               :y "0px"
+                               :width "250px"
+                               :height "40px"
+                               :anchor "top right")
+           :stacking "fg"
+           :windowtype "dock"
+           :wm-ignore false
+(resources))
+
+
+;; system
+(defwindow system
+           :monitor 0
+           :geometry (geometry :x "0px"
+                               :y "0px"
+                               :width "390px"
+                               :height "40px"
+                               :anchor "top right")
+           :stacking "fg"
+           :reserve (struts :distance "80px" :side "top")
+           :windowtype "dock"
+           :wm-ignore false
+(system))

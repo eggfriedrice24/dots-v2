@@ -1,0 +1,85 @@
+/** Global *******************************************/
+* {
+  all: unset;
+  font-family: feather;
+  font-family: "Cartograph CF";
+  color: white;
+}
+
+/** Bar ***********************************/
+.wrapper {
+  background-color: #0f172a;
+  border-radius: 5px;
+}
+
+/** Icons ***********************************/
+.appicon,
+.dashboardicon {
+  background-repeat: no-repeat;
+  background-size: 28px;
+  min-height: 28px;
+  min-width: 28px;
+}
+
+.workspace {
+  background-color: #c04364;
+  color: #ffffff;
+  border: 2px solid #161616;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/** Clock ********************************************/
+.clockbox {
+  margin: 0px 0px 0px 0px;
+}
+
+.time {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.date {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/** Resources ***********************************/
+.resourceicon {
+  background-repeat: no-repeat;
+  background-size: 24px;
+  min-height: 24px;
+  min-width: 24px;
+}
+
+.value {
+  font-size: 15px;
+}
+
+/** System *************************************************/
+.trayicon {
+  background-repeat: no-repeat;
+  background-size: 24px;
+  min-height: 24px;
+  min-width: 24px;
+  margin: 8px 0px 0px 0px;
+}
+
+.infotext {
+  border: 0px solid #161616;
+  font-size: 14px;
+  padding: 0px 5px 0px 5px;
+  margin: 10px 0px 10px 0px;
+  font-weight: bold;
+}
+
+.avatar {
+  background-size: 24px;
+  min-height: 24px;
+  min-width: 24px;
+  margin: 8px 0px 8px 0px;
+  border-radius: 100%;
+}
+
+/** EOF *************************************************/
